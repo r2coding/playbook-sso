@@ -1,0 +1,29 @@
+#!/bin/bash
+
+embed-server --std-out=echo --server-config=keycloak.xml
+
+batch
+
+module add --name={{ oracle_eap_module }} --resources={{ oracle_jar }} --dependencies=javax.api,javax.resource.api
+
+/subsystem=datasources/jdbc-driver={{ oracle_driver_name }}:add( \
+    driver-name={{ oracle_driver_name }}, \
+    driver-module-name={{ oracle_eap_module }}, \
+    driver-xa-datasource-class-name={{ oracle_xa_driver }} \
+)
+
+/subsystem=datasources/data-source=KeycloakDS:remove()
+
+/subsystem=datasources/data-source=KeycloakDS:add( \
+    jndi-name=java:jboss/datasources/KeycloakDS, \
+    enabled=true, \
+    use-java-context=true, \
+    connection-url={{ oracle_jdbc_url }}, \
+    driver-name={{ oracle_driver_name }}, \
+    user-name={{ oracle_username }}, \
+    password={{ oracle_password }} \
+)
+
+run-batch
+
+quit
