@@ -217,7 +217,7 @@
   register: jdbc7_oracle
 
 # Template the actions cli to override variables
-- name: "Replace the variables in the the actions.cli FOIL | user: {{ oracle_username }} pass: {{ oracle_password }} jdbc: {{ oracle_jdbc_url }} jar: {{ oracle_jar }} END"
+- name: "Replace the variables in the the actions.cli file
   template:
     src: "{{ local_path.stat.path }}/extensions/actions.cli"
     dest: "{{ keycloak_jboss_home }}/extensions"
