@@ -96,10 +96,10 @@ keycloak_default_jdbc:
 
 
 # Actions Cli variables  
+oracle_username: rhssolab
+oracle_password: galicia2019
+oracle_jdbc_url: jdbc:oracle:thin:@192.168.1.37:1521/XE
+oracle_jar: "{{ keycloak_jboss_home }}/extensions/ojdbc7.jar"
 oracle_xa_driver: oracle.jdbc.xa.client.OracleXADataSource
 oracle_eap_module: com.oracle
 oracle_driver_name: oracle
-oracle_username: user
-oracle_password: password
-oracle_jdbc_url: jdbc:oracle:thin:@127.0.0.1:1521/keycloak
-oracle_jar: "{{ keycloak_jboss_home }}/extensions/ojdbc7.jar"
