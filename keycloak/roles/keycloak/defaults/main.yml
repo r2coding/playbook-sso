@@ -63,7 +63,7 @@ keycloak_force_install: False
 keycloak_modcluster_url: localhost
 
 ### keycloak frontend url
-keycloak_frontend_url: http://localhost:8080/auth
+keycloak_frontend_url:
 
 ### infinispan remote caches access (hotrod)
 infinispan_user: supervisor
@@ -90,7 +90,7 @@ keycloak_default_jdbc:
   mariadb:
     url: 'jdbc:mariadb://localhost:3306/keycloak'
     version: 2.7.4
-  oralce:
+  oracle:
     url: 'jdbc:oracle:thin:@localhost:1521/keycloak'
     version: 7
 

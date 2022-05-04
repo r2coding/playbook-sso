@@ -179,7 +179,7 @@
       jdbc_driver_jar_url: "{{ keycloak_jdbc[keycloak_jdbc_engine].driver_jar_url }}"
       jdbc_driver_jar_installation_path: "{{ keycloak_jdbc[keycloak_jdbc_engine].driver_module_dir }}/{{ keycloak_jdbc[keycloak_jdbc_engine].driver_jar_filename }}"
       jdbc_driver_module_name: "{{ keycloak_jdbc[keycloak_jdbc_engine].driver_module_name }}"
-  when: keycloak_jdbc[keycloak_jdbc_engine].enabled #and keycloak_jdbc_engine != "oracle"
+  when: keycloak_jdbc[keycloak_jdbc_engine].enabled and keycloak_jdbc_engine != 'oracle'
 
 # Deploy step
 - name: "Deploy {{ keycloak.service_name }} config to {{ keycloak_config_path_to_standalone_xml }}"
@@ -214,14 +214,16 @@
     owner: "{{ keycloak_service_user }}"
     group: "{{ keycloak_service_group }}"
     mode: 0755
-  register: jdbc7_oracle
-
+  register: oracle_drivers_copied
+  become: yes
+  when: keycloak_jdbc[keycloak_jdbc_engine].enabled and keycloak_jdbc_engine == 'oracle'
+  
 # Template the actions cli to override variables
-- name: "Replace the variables in the the actions.cli file
+- name: "Replace the variables in the the actions.cli FOIL | user: {{ oracle_username }} pass: {{ oracle_password }} jdbc: {{ oracle_jdbc_url }} jar: {{ oracle_jar }} END"
   template:
     src: "{{ local_path.stat.path }}/extensions/actions.cli"
     dest: "{{ keycloak_jboss_home }}/extensions"
-  register: actions_cli
+  when: keycloak_jdbc[keycloak_jdbc_engine].enabled and keycloak_jdbc_engine == 'oracle'
 
 # Oracle JDBC using Jboss Cli installation
 - name: "Execute Actions CLI in order to add Oracle JDBC"
@@ -230,3 +232,6 @@
   become: yes
   changed_when: false
   register: cli_result
+  notify:
+  - restart keycloak
+  when: keycloak_jdbc[keycloak_jdbc_engine].enabled and keycloak_jdbc_engine == 'oracle'
