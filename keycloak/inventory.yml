@@ -3,4 +3,11 @@
 ## Run playbook locally
 #localhost ansible_connection=local
 ## Run playbook remotely
-192.168.100.131 ansible_user=root ansible_become_method=sudo ansible_ssh_pass=root
+# INTEGRACION
+10.21.20.20 ansible_user=root 
+
+# UAT
+
+# PREPRO
+
+# PROD
